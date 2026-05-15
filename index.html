@@ -457,8 +457,25 @@ input,textarea,select{font-family:inherit}
   .editor-panel{border-right:none;border-bottom:1px solid var(--border)}
 }
 @media (max-width: 768px){
-  .phone-frame{width:300px;height:540px}
-  .qr-box{width:300px}
+  body{overflow:auto}
+  .app-header{display:none}
+  .main{grid-template-columns:1fr;height:100vh}
+  .editor-panel{display:none}
+  .preview-panel{background:var(--bg-primary)}
+  .view-tabs{display:none}
+  .view-container{padding:0;overflow:auto}
+  #view-phone,#view-landing{display:none !important}
+  #view-app{display:block !important}
+  #view-app .browser-frame{
+    border-radius:0;border:none;box-shadow:none;max-width:none;margin:0;
+  }
+  #view-app .browser-bar{display:none}
+  #view-app .browser-body{max-height:none;overflow:visible}
+  .app-items{grid-template-columns:1fr;padding:14px 16px}
+  .app-top{padding:24px 16px 16px}
+  .app-top h1{font-size:24px}
+  .app-search{padding:12px 16px}
+  .app-cats{padding:12px 16px}
   .lp-hero h1{font-size:30px}
   .lp-features-grid,.lp-contact-grid{grid-template-columns:1fr}
 }
@@ -682,7 +699,8 @@ const STORAGE_INIT = 'qr-menu-initialized';
 
 let state = loadState();
 let activeCategoryIndex = 0;
-let currentView = 'phone';
+const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
+let currentView = isMobile() ? 'app' : 'phone';
 let editingItemId = null;
 let imageRequestsInFlight = new Set();
 let lastImageRequestAt = new Map();
@@ -1320,6 +1338,13 @@ function renderAll(){
   updateApiBadge();
 }
 renderAll();
+
+window.addEventListener('resize', () => {
+  if(isMobile() && currentView !== 'app'){
+    currentView = 'app';
+    renderCurrentView();
+  }
+});
 </script>
 </body>
 </html>
