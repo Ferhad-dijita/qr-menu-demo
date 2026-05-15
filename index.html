@@ -453,31 +453,29 @@ input,textarea,select{font-family:inherit}
 
 /* RESPONSIVE */
 @media (max-width: 1024px){
-  .main{grid-template-columns:1fr;}
-  .editor-panel{border-right:none;border-bottom:1px solid var(--border)}
+  body{overflow:auto}
+  .main{grid-template-columns:1fr;height:auto}
+  .editor-panel{border-right:none;border-bottom:1px solid var(--border);overflow:visible}
+  .preview-panel{overflow:visible}
+  .view-container{overflow:visible}
 }
 @media (max-width: 768px){
-  body{overflow:auto}
-  .app-header{display:none}
-  .main{grid-template-columns:1fr;height:100vh}
-  .editor-panel{display:none}
-  .preview-panel{background:var(--bg-primary)}
-  .view-tabs{display:none}
-  .view-container{padding:0;overflow:auto}
-  #view-phone,#view-landing{display:none !important}
-  #view-app{display:block !important}
-  #view-app .browser-frame{
-    border-radius:0;border:none;box-shadow:none;max-width:none;margin:0;
-  }
-  #view-app .browser-bar{display:none}
-  #view-app .browser-body{max-height:none;overflow:visible}
+  .app-header{flex-wrap:wrap;height:auto;padding:10px 14px;gap:8px}
+  .app-header .titles h1{font-size:13px}
+  .editor-panel{padding:16px}
+  .view-tabs{padding:10px 12px;flex-wrap:wrap}
+  .view-tab{padding:7px 10px;font-size:12px}
+  .view-container{padding:14px}
+  .phone-frame{width:300px;height:540px}
+  .qr-box{width:300px}
+  .browser-body{max-height:none}
   .app-items{grid-template-columns:1fr;padding:14px 16px}
-  .app-top{padding:24px 16px 16px}
-  .app-top h1{font-size:24px}
-  .app-search{padding:12px 16px}
-  .app-cats{padding:12px 16px}
+  .lp-hero{padding:40px 20px}
   .lp-hero h1{font-size:30px}
+  .lp-features,.lp-popular,.lp-contact,.lp-cta{padding:36px 20px}
   .lp-features-grid,.lp-contact-grid{grid-template-columns:1fr}
+  .item-row{flex-wrap:wrap}
+  .item-info{flex:1 1 100%;order:-1}
 }
 </style>
 </head>
@@ -699,8 +697,7 @@ const STORAGE_INIT = 'qr-menu-initialized';
 
 let state = loadState();
 let activeCategoryIndex = 0;
-const isMobile = () => window.matchMedia('(max-width: 768px)').matches;
-let currentView = isMobile() ? 'app' : 'phone';
+let currentView = 'phone';
 let editingItemId = null;
 let imageRequestsInFlight = new Set();
 let lastImageRequestAt = new Map();
@@ -1338,13 +1335,6 @@ function renderAll(){
   updateApiBadge();
 }
 renderAll();
-
-window.addEventListener('resize', () => {
-  if(isMobile() && currentView !== 'app'){
-    currentView = 'app';
-    renderCurrentView();
-  }
-});
 </script>
 </body>
 </html>
